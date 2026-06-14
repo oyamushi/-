@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 新しい国際経済学ストラテジスト</title>
+    <style>
+        :root {
+            --primary: #1f77b4;
+            --success: #2ca02c;
+            --error: #d62728;
+            --bg: #f8f9fa;
+            --text: #333;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            color: var(--text);
+            background-color: var(--bg);
+            height: 100vh;
+        }
+        /* サイドバー */
+        #sidebar {
+            width: 300px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        #sidebar h2 {
+            font-size: 1.2rem;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .chapter-btn {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            background: none;
+            border: none;
+            color: #ecf0f1;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .chapter-btn:hover {
+            background-color: #34495e;
+        }
+        .chapter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        /* メインコンテンツ */
+        #main-content {
+            flex: 1;
+            padding: 40px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        .section-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* クイズ選択肢 */
+        .option-label {
+            display: block;
+            padding: 12px 15px;
+            background-color: #f1f3f5;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-label:hover {
+            background-color: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 10px;
+        }
+        /* 決定ボタン */
+        #submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        #submit-btn:hover {
+            background-color: #1a6596;
+        }
+        /* 結果表示 */
+        .result-box {
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .result-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .result-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        #explanation-section, #dictionary-section {
+            display: none;
+        }
+        /* 用語辞典アコーディオン */
+        .dict-item {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+        .dict-title {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+        .dict-desc {
+            padding: 15px;
+            border-top: 1px solid #dee2e6;
+            line-height: 1.6;
+        }
+        .dict-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .dict-link:hover {
+            text-decoration: underline;
+        }
+        /* エンディング用 */
+        .ending-box {
+            padding: 40px;
+            background: linear-gradient(135deg, #e0f2fe, #f0fdf4);
+            border: 2px solid #bbf7d0;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .ending-box h2 {
+            color: #166534;
+            font-size: 2rem;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <h2>🧭 章選択（目次）</h2>
+        <div id="chapter-list"></div>
+    </div>
+
+    <div id="main-content">
+        <h1 id="app-title">🎬 新しい国際経済学ストラテジスト</h1>
+        <p id="app-subtitle" style="color: #666; margin-bottom: 30px;">〜完全無欠・全18章フルコンプリート版〜</p>
+
+        <div id="content-area">
+            <h2 id="current-chapter-title" style="color: #2c3e50; margin-bottom: 20px;"></h2>
+
+            <div class="section-box">
+                <div class="section-title">📖 ストーリー</div>
+                <div id="story-text"></div>
+            </div>
+
+            <div class="section-box" id="quiz-box">
+                <div class="section-title">❓ 経済戦略クイズ</div>
+                <div id="quiz-text" style="margin-bottom: 20px; font-weight: bold;"></div>
+                <div id="options-container" style="margin-bottom: 20px;"></div>
+                <button id="submit-btn" onclick="checkAnswer()">この解答で決定する</button>
+            </div>
+
+            <div id="result-message" class="result-box"></div>
+
+            <div class="section-box" id="explanation-section">
+                <div class="section-title">💡 講義解説</div>
+                <div id="explanation-text"></div>
+            </div>
+
+            <div class="section-box" id="dictionary-section">
+                <div class="section-title">📚 関連キーワードミニ辞典</div>
+                <div id="dictionary-container"></div>
+            </div>
+        </div>
+
+        <div id="ending-area" style="display: none;"></div>
+    </div>
+
+    <script>
+        const chapters = {
+          "第0章(①): 国富の正体": {
+                story: "現代の「国の豊かさ」とは何か。重商主義的な『お金の蓄積』の誤解を解き、GDPの本質である『生産と消費の循環』を学びます。",
+                quiz: "現代の国際経済において、「国の豊かさ（国富）」を最も適切に表す指標はどれでしょう？",
+                options: ["A) 国が保有する金（ゴールド）や外貨準備の量", "B) 国内で一定期間に生み出された付加価値の総計（GDP）", "C) 貿易黒字の累計額"],
+                correct: "B) 国内で一定期間に生み出された付加価値の総計（GDP）",
+                explanation: "豊かさとは、お金を溜め込むことではなく、どれだけ活発にモノやサービスが生産され、人々に消費されているか（経済の循環）で決まります。",
+                keywords: {
+                    "GDP（国内総生産）": {
+                        desc: "国内で一定期間内に新しく生み出されたモノやサービスの「付加価値」の合計のこと。国の経済規模や景気を示す最も代表的な指標です。",
+                        url: `https://ja.wikipedia.org/wiki/${encodeURIComponent("国内総生産")}`
+                    }
+                }
+            },
+          "第0章(②): 貿易と直接投資": {
+                story: "モノを売り買いする「貿易」と、現地に工場や会社を作る「直接投資」。グローバル化の2大エンジンを理解します。",
+                quiz: "他国に自社の工場を建設したり、現地の企業を買収して経営に参加したりする投資行動を何と呼ぶでしょう？",
+                options: ["A) 間接投資（証券投資）", "B) 政府開発援助（ODA）", "C) 海外直接投資（FDI）"],
+                correct: "C) 海外直接投資（FDI）",
+                explanation: "単なる株の売買（間接投資）とは異なり、現地の経営に直接関与し、技術や雇用をもたらす投資を直接投資と呼びます。",
+                keywords: {
+                    "海外直接投資（FDI）": {
+                        desc: "企業が外国に子会社や工場を設立したり、現地の企業を買収して経営支配権を伴う資産を取得する投資のことです。",
+                        url: "https://ja.wikipedia.org/wiki/%E5%AF%BE%E5%A4%96%E7%9B%B4%E6%8E%A5%E6%8A%95%E8%B3%87"
+                    }
+                }
+            },
+            "第0章(③): 政府と家計のサイフ": {
+                story: "国全体の経済（マクロ経済）における、政府、企業、家計の「サイフ（資金の過不足）」の繋がりを読み解きます。",
+                quiz: "一国の経済において、家計の貯蓄超過、企業の資金不足、政府の財政赤字の間にはどのような関係があるでしょう？",
+                options: ["A) それぞれ全く無関係に決まる", "B) 誰かの黒字（貯蓄超過）は、必ず別の誰かの赤字（借金超過）と裏表で一致する", "C) 全員が同時に黒字になることができる"],
+                correct: "B) 誰かの黒字（貯蓄超過）は、必ず別の誰かの赤字（借金超過）と裏表で一致する",
+                explanation: "マクロ経済の会計上、国全体の資金過不足は「（貯蓄−投資）＋（財政収支）＝ 経常収支」というバランス関係で結ばれています。",
+                keywords: {
+                    "マクロ経済バランス": {
+                        desc: "一国全体の経済において、家計・企業・政府・海外のそれぞれの部門における資金の収支（過不足）が、必ず互いに相殺し合うという会計上の原則です。",
+                        url: "https://ja.wikipedia.org/wiki/%E5%9B%BD%E9%9A%9B%E5%8F%8E%E6%94%AF"
+                    }
+                }
+            },
+            "第1章: 重商主義の罠": {
+                story: "16〜18世紀のヨーロッパを支配した「貿易黒字こそが全て」という思想。その限界と金銀の流出入の真実を暴きます。",
+                quiz: "重商主義が「罠」とされる最大の理由は、貿易黒字を上げて国内に金銀（貨幣）を溜め込みすぎると、何が発生するからでしょう？",
+                options: ["A) 極端なデフレ（物価下落）", "B) 国内の物価高騰（インフレ）と輸出競争力の低下", "C) 通貨価値の暴落"],
+                correct: "B) 国内の物価高騰（インフレ）と輸出競争力の低下",
+                explanation: "金銀が流入しすぎると国内の貨幣量が増え、物価が上昇します（正貨流出入メカニズム）。結果、輸出が不利になり黒字は続かなくなります。",
+                keywords: {
+                    "重商主義": {
+                        desc: "16世紀から18世紀にかけてヨーロッパで支配的だった経済思想。国の富は金銀の保有量であり、保護貿易によって貿易黒字を拡大すべきだと主張しました。",
+                        url: "https://ja.wikipedia.org/wiki/%E9%87%8D%E5%95%86%E4%B8%BB%E7%BE%A9"
+                    }
+                }
+            },
+            "第2章: リカード比較生産費": {
+                story: "経済学史上最大の発見の一つ。すべての産業で他国より劣っていても、貿易によってお互いが得をする理論を学びます。",
+                quiz: "リカードの「比較生産費説（比較優位の原則）」が教えてくれる、最も重要な結論はどれでしょう？",
+                options: ["A) あらゆる製品を自国で自給自足するのが最も効率的である", "B) 他国より『相対的に得意な（マシな）』産業に特化して貿易すれば、両国とも豊かになる", "C) 生産性が低い国は、高い国に常に搾取される"],
+                correct: "B) 他国より『相対的に得意な（マシな）』産業に特化して貿易すれば、両国とも豊かになる",
+                explanation: "絶対的な強さ（絶対優位）ではなく、自国内での「比較」でマシな方に集中（特化）して交換することが、全体の利益を最大化します。",
+                keywords: {
+                    "比較優位": {
+                        desc: "デヴィッド・リカードが提唱した国際分業の基礎理論。各国が自国内で相対的に生産性の高い（機会費用が低い）商品の生産に特化して貿易を行うことで、双方に利益がもたらされるという理論です。",
+                        url: "https://ja.wikipedia.org/wiki/%E6%AF%94%E8%BC%83%E7%94%9F%E7%94%A3%E8%B2%BB%E8%AA%AC"
+                    }
+                }
+            },
+            "第3章: リスト幼稚産業保護": {
+                story: "イギリスのような強国に対抗するため、ドイツの経済学者リストが唱えた「今はまだ弱い国内産業を育てる」ための保護貿易論です。",
+                quiz: "フリードリヒ・リストが、後発国が先進国と対等に渡り合うために必要だと主張した政策はどれでしょう？",
+                options: ["A) 最初から完全な自由貿易を行う", "B) 将来性のある国内産業（幼稚産業）が育つまで、一時的に関税などで保護する", "C) 農業のみに特化する"],
+                correct: "B) 将来性のある国内産業（幼稚産業）が育つまで、一時的に関税などで保護する",
+                explanation: "まだ実力のない子供（幼稚産業）を大人の格闘家（先進国）とそのまま戦わせたら潰れてしまうため、育つまでの保護が必要だと説きました。",
+                keywords: {
+                    "幼稚産業保護論": {
+                        desc: "経済発展の後発国が、将来的に国際競争力を持つ可能性のある国内産業（幼稚産業）を保護・育成するために、一時的に関税や輸入制限を課すべきだとする理論です。",
+                        url: "https://ja.wikipedia.org/wiki/%E5%B9%BC%E7%A8%9A%E7%94%A3%E6%A5%AD%E4%BF%9D%E8%AD%B7%E8%AB%96"
+                    }
+                }
+            },
+            "第4章: ヘクシャー＝オーリン": {
+                story: "なぜ国によって得意な製品が違うのか？その理由は、国が持つ「資源（労働、資本、土地）」の豊富さにあるとするモダンな貿易理論です。",
+                quiz: "ヘクシャー＝オーリン理論によると、日本のように「資本（工場や機械・資金）」が豊富な国は、どのような製品を輸出する傾向があるでしょう？",
+                options: ["A) 大量の労働力を必要とする手工業品", "B) 莫大な設備や高度な技術（資本）を必要とする工業製品", "C) 広大な土地を必要とする農産物"],
+                correct: "B) 莫大な設備や高度な技術（資本）を必要とする工業製品",
+                explanation: "自国に豊富にある生産要素（日本なら資本や技術）をたくさん使う製品を作り、それを輸出するのが最も有利になります。",
+                keywords: {
+                    "ヘクシャー＝オーリンの定理": {
+                        desc: "各国は自国に豊富に存在する生産要素（労働や資本など）を多く投入する財に比較優位を持ち、それを輸出するという国際貿易の理論です。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%83%98%E3%82%AF%E3%82%B7%E3%83%A3%E3%83%BC%EF%BC%9D%E3%82%AA%E3%83%BC%E3%83%AA%E3%83%B3%E3%81%AE%E5%AE%9A%E7%90%86"
+                    }
+                }
+            },
+           "第5章: 産業連関と価値鎖": {
+                story: "一つの製品が多くの国をまたいで作られる現代。「グローバル・バリュー・チェーン（GVC）」の構造と、どこで利益が生まれるかを解明します。",
+                quiz: "現代の製造業において、最も高い利益（付加価値）が生まれやすいのはどの一連の工程でしょう？（スマイルカーブ現象）",
+                options: ["A) 中間の「組み立て・製造」の工程", "B) 川上の「研究開発・デザイン」や、川下の「マーケティング・アフターサービス」", "C) 部品の単純な輸送工程"],
+                correct: "B) 川上の「研究開発・デザイン」や、川下の「マーケティング・アフターサービス」",
+                explanation: "単純な組み立て（製造）の付加価値は下がり、開発やブランド、サービスといった知的・商業的プロセスに利益が集中する傾向があります。",
+                keywords: {
+                    "グローバル・バリュー・チェーン": {
+                        desc: "製品の企画、開発、部品製造、組み立て、販売、アフターサービスといった一連の付加価値創出活動が、複数の国々にまたがってネットワーク化されている構造のことです。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%90%E3%83%AA%E3%83%A5%E3%83%BC%E3%83%BB%E3%83%81%E3%82%A7%E3%83%BC%E3%83%B3"
+                    }
+                }
+            },
+            "第6章: 植民地型・資源投資": {
+                story: "歴史的な南北問題の根底にある貿易構造。先進国が資源国に対して行う投資と、モノカルチャー経済の脆さを学びます。",
+                quiz: "特定の一次産品（石油や鉱物、特定の農産物など）の輸出だけに国全体の経済が依存している状態を何と呼ぶでしょう？",
+                options: ["A) ポートフォリオ経済", "B) モノカルチャー経済", "C) 多角化経済"],
+                correct: "B) モノカルチャー経済",
+                explanation: "一つの作物や資源に依存すると、国際価格が暴落した瞬間に国全体の経済が崩壊するという極めて高いリスクを抱えることになります。",
+                keywords: {
+                    "モノカルチャー経済": {
+                        desc: "特定の農産物や鉱物資源など、ごく限られた一種または数種の一次産品の生産と輸出に、国の経済構造全体が依存している状態のことです。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%8E%E3%82%AB%E3%83%AB%E3%83%81%E3%83%A3%E3%83%BC"
+                    }
+                }
+            },
+           "第7章: 政治的トリレンマ": {
+                story: "国際金融論における最も重要な鉄則。「3つの魅力的な政策のうち、同時に2つしか選べない」という厳しい現実を突きつけます。",
+                quiz: "「国際金融のトリレンマ」において、同時に成り立たせることが不可能な3つの政策の組み合わせはどれでしょう？",
+                options: ["A) 高成長、低インフレ、財政黒字", "B) 固定相場制、独立した金融政策、自由な資本移動", "C) 貿易黒字、株高、円安"],
+                correct: "B) 固定相場制、独立した金融政策、自由な資本移動",
+                explanation: "資本移動を自由にしながら為替を固定すると、他国の金利に合わせざるを得なくなり、自国の景気コントロール（独立した金融政策）を諦める必要があります。",
+                keywords: {
+                    "国際金融のトリレンマ": {
+                        desc: "「固定為替相場制」「独立した金融政策」「自由な資本移動」の3つの政策目標は、同時に2つしか達成できず、3つすべてを同時に満たすことはできないという定理です。",
+                        url: "https://ja.wikipedia.org/wiki/%E5%9B%BD%E9%9A%9B%E9%87%91%E8%9E%8D%E3%81%AE%E3%83%88%E3%83%AA%E3%83%AC%E3%83%B3%E3%83%9E"
+                    }
+                }
+            },
+            "第8章: 債務の罠と審査制度": {
+                story: "発展途上国へのインフレ投資を名目に巨額の資金を貸し付け、返済不能に陥った国の港や領土の権利を奪う現代の国際政治リスクを学びます。",
+                quiz: "インフレ支援などの名目で相手国を借金漬けにし、外交的・戦略的な譲歩を迫る大国の手法を、一般に何と呼ぶでしょう？",
+                options: ["A) 債務の罠（ドル・ディプロマシー、借金外交）", "B) 善意の融資", "C) ポートフォリオ支援"],
+                correct: "A) 債務の罠（ドル・ディプロマシー、借金外交）",
+                explanation: "戦略的な要所（港など）の建設費を貸し付け、返せなくなったら「99年間租借（運営権奪取）」といった形で実質的に支配する手法が問題視されています。",
+                keywords: {
+                    "債務の罠": {
+                        desc: "過剰な債務を負わせることで、融資国（貸し手）が借入国（借り手）に対して不当な外交的・経済的影響力を獲得しようとする、国際政治・経済における手法や批判のことです。",
+                        url: "https://ja.wikipedia.org/wiki/%E5%82%B5%E5%8B%99%E3%81%AE%E7%BD%A0"
+                    }
+                }
+            },
+           "第9章: 金本位制とドルの檻": {
+                story: "かつて世界を支配した「通貨を金（ゴールド）の価値で裏付ける」制度から、アメリカの「ドル」が絶対的な基軸通貨となった戦後のブレトンウッズ体制を学びます。",
+                quiz: "1944年に成立し、米ドルだけを金と交換可能とし、他国通貨はドルに固定した、戦後の国際通貨体制を何と呼ぶでしょう？",
+                options: ["A) ニクソン・ショック", "B) ブレトンウッズ体制", "C) プラザ合意"],
+                correct: "B) ブレトンウッズ体制",
+                explanation: "この体制により米ドルが世界の圧倒的な「基軸通貨（キング・オブ・カレンシー）」としての地位を確立しました。",
+                keywords: {
+                    "ブレトン・ウッズ体制": {
+                        desc: "第二次世界大戦末期の1944年に合意された国際通貨体制。米ドルを基軸通貨とし、金1オンス＝35ドルに固定して、各国の通貨をドルに連動させた固定相場制です。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AC%E3%83%88%E3%83%B3%E3%83%BB%E3%82%A6%E3%83%83%E3%82%BA%E4%BD%93%E5%88%B6"
+                    }
+                }
+            },
+            "第10章: ニクソン・ショック": {
+                story: "ベトナム戦争などの巨額の出費により、アメリカの金（ゴールド）が激減。1971年、ニクソン大統領はついに「ドルと金の交換をストップする」と世界に宣言し、固定相場制は崩壊へと向かいます。",
+                quiz: "ニクソン・ショックによって、世界の通貨制度は「ドルと金の交換を前提とした固定相場制」から、どのような制度へ移行することになったでしょう？",
+                options: ["A) 新・金本位制", "B) 為替相場が市場の需給で毎日変わる「変動為替相場制」", "C) 世界統一通貨の導入"],
+                correct: "B) 為替相場が市場の需給で毎日変わる「変動為替相場制」",
+                explanation: "金の裏付けを失ったドルは価値が下がり、世界は市場の取引によって為替レートが自由に動く「変動相場制」の時代に突入しました。",
+                keywords: {
+                    "ニクソン・ショック": {
+                        desc: "1971年8月に米大統領ニクソンが発表した、米ドルと金との交換停止をはじめとする一連の経済政策と、それによる国際通貨体制の混乱・崩壊を指します。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AC%E3%83%88%E3%83%B3%E3%82%A6%E3%83%83%E3%83%BA%E4%BD%93%E5%88%B6"
+                    }
+                }
+            },
+         "第11章: プラザ合意": {
+                story: "変動相場制になってもアメリカの貿易赤字は止まらず。1985年、先進5カ国（G5）がニューヨークのプラザホテルに集まり、意図的に「ドル安・円高」を誘導する歴史的な合意を交わします。",
+                quiz: "プラザ合意の後、日本経済には急激な円高が進みました。日本政府がこの円高不況を和らげるために行った超低金利政策は、のちに何を引き起こす原因となったでしょう？",
+                options: ["A) 深刻なデフレスパイラル", "B) 空前の「バブル経済」とその後の崩壊", "C) 通貨ハイパーインフレ"],
+                correct: "B) 空前の「バブル経済」とその後の崩壊",
+                explanation: "円高による不況を防ぐために日銀が金利を大幅に下げた結果、世の中にお金が溢れ返り、土地や株価が異常高騰する「バブル経済」が生まれました。",
+                keywords: {
+                    "プラザ合意": {
+                        desc: "1985年9月22日、主要5カ国（G5）の蔵相・中央銀行総裁が、ドル高を是正するために為替市場への協調介入を行うことで一致した合意です。これにより劇的な円高が進みました。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%A9%E3%82%B6%E5%90%88%E6%84%8F"
+                    }
+                }
+            },
+            "第12章: マーシャル・ラーナー条件": {
+                story: "「プラザ合意で円高・ドル安になったのに、なぜアメリカの貿易赤字はすぐ減らず、むしろ最初は悪化したのか？」その謎を解くのが、Jカーブ効果とマーシャル・ラーナー条件です。",
+                quiz: "為替が大きく変動した直後、数量の調整が遅れるために、短期的にはかえって貿易収支の赤字が拡大し、時間が経ってから改善する現象を何というでしょう？",
+                options: ["A) Sカーブ効果", "B) V字回復現象", "C) Jカーブ効果"],
+                correct: "C) Jカーブ効果",
+                explanation: "通貨安になっても輸出の数量はすぐには増えません。一方で、輸入代金が先につり上がるため、初期は赤字が拡大し、グラフがJの字を描くようになります。",
+                keywords: {
+                    "マーシャル・ラーナー条件": {
+                        desc: "為替レートの変動（通貨切り下げなど）が、一国の貿易収支を改善させるために満たすべき、輸出入の価格弾力性に関する数理的条件のことです。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%BC%E3%82%B7%E3%83%A3%E3%83%AB%E3%83%BB%E3%83%A9%E3%83%BC%E3%83%8A%E3%83%BC%E6%9D%A1%E4%BB%B6"
+                    }
+                }
+            },
+            "第13章: 通貨危機と金利の罠": {
+                story: "1990年代、急成長するアジアに目をつけたヘッジファンドが、ドルペッグ（固定相場）を採用していたタイ・バーツに猛烈な売り攻撃を仕掛け、アジア全体を大混乱に陥れました。",
+                quiz: "1997年、タイ・バーツへの投機的な売り浴びせをきっかけに、アジア各国の通貨や経済が連鎖的に大暴落した事件を何と呼ぶでしょう？",
+                options: ["A) アジア通貨危機", "B) リーマン・ショック", "C) 世界大恐慌"],
+                correct: "A) アジア通貨危機",
+                explanation: "固定相場を維持できなくなったタイが変動相場制へ移行しバーツが暴落、その火が韓国やインドネシアに飛び火し、経済が壊滅的打撃を受けました。",
+                keywords: {
+                    "アジア通貨危機": {
+                        desc: "1997年7月よりタイを中心に始まった、東アジア・東南アジア諸国の通貨暴落、株価急急落に伴う一連の経済危機のことです。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%82%A2%E3%82%B8%E3%82%A2%E9%80%9A%E8%B2%A8%E5%8D%B1%E6%A9%9F"
+                    }
+                }
+            },
+            "第14章: 資本規制とIMF批判": {
+                story: "アジア通貨危機に陥った国々に対し、国際通貨基金（IMF）は支援の条件として過酷な「緊縮財政と市場の完全開放」を突きつけ、現地の経済をさらに凍りつかせました。これに対し、市場主義への強い批判が巻き起こります。",
+                quiz: "IMFの「さらに市場を開放せよ」という指示を拒絶し、海外への急激な資金流出を力ずくで止めるために、一部の国（マレーシアなど）が独自に導入して成果を上げた政策はどれでしょう？",
+                options: ["A) 完全な金融自由化", "B) 資本規制（海外へのドルの送金制限など）", "C) さらなる利下げと減税"],
+                correct: "B) 資本規制（海外へのドルの送金制限など）",
+                explanation: "マレーシアはあえてドルの持ち出しを一時的に禁止（資本規制）する独自の防衛策をとり、IMFの言う通りにした国々よりも傷口を浅く抑えることに成功しました。",
+                keywords: {
+                    "国際通貨基金": {
+                        desc: "国際通貨体制の安定を目的とする国連の専門機関。国際収支が著しく悪化した加盟国に対し融資を行いますが、その引き換えに過酷な経済構造調整を要求することが多く、批判の対象にもなります。",
+                        url: "https://ja.wikipedia.org/wiki/%E5%9B%BD%E9%9A%9B%E9%8A%80%E8%A1%8C"
+                    }
+                }
+            },
+            "第15章: 通貨主権の完全放棄": {
+                story: "自国の通貨があまにも信用を失い、ハイパーインフレが止まらない国が行う究極の選択。それが、自国通貨を完全に廃止し、他国の通貨（米ドルなど）をそのまま公式通貨にする「ドル化政策」です。",
+                quiz: "ドル化政策を採用することで、その国が失う「最大の代償（デメリット）」は何でしょう？",
+                options: ["A) 自国独自の金融政策の権限（中央銀行が自国の景気に合わせて金利をコントロールする力）", "B) 国内のインフレのさらなる激化", "C) 外国との貿易の全面停止"],
+                correct: "A) 自国独自の金融政策の権限（中央銀行が自国の景気に合わせて金利をコントロールする力）",
+                explanation: "ドル化によって通貨の信用は一瞬で回復しインフレは止まりますが、金利を上げ下げして自国の景気を調整する「通貨主権」を完全にアメリカに握られることになります。",
+                keywords: {
+                    "ドル化": {
+                        desc: "発展途上国などが、激しいインフレや通貨暴落を抑えるために、自国の法定通貨を廃止・放棄し、米ドルなどの強力な外国通貨を国内の公式な決済手段として採用する政策です。",
+                        url: "https://ja.wikipedia.org/wiki/%E3%83%89%E3%83%AB%E5%8C%96"
+                    }
+                }
+            },
+         "第16章: マンデルフレミング批判とMMT": {
+                story: "主流派マクロ経済学が誇る「マンデル＝フレミング・モデル」。そこでは『変動相場制下での財政政策は、金利上昇と通貨高を招くため無効化される』と結論づけられます。しかし、現代貨幣理論（MMT）は、そのモデルが前提とする「金利決定メカニズム」や「クラウディング・アウト論」の根本的な誤りを突いています。",
+                quiz: "MMTが、マンデル＝フレミング・モデルの「財政出動をすると自動的に国内金利が上昇し、通貨高を招く」という前提を批判する根拠として、最も適切なものはどれでしょう？",
+                options: [
+                    "A) 財政赤字は民間部門の純金融資産を増やすため資金を枯渇させず、中央銀行は政策金利を自ら目標水準に固定・誘導できるから",
+                    "B) 政府が国債を発行すると、外国からの資本流入が自動的にストップして金利が下がるから",
+                    "C) 変動相場制下では、いかなる場合も為替レートが一切変動しなくなるから"
+                ],
+                correct: "A) 財政赤字は民間部門の純金融資産を増やすため資金を枯渇させず、中央銀行は政策金利を自ら目標水準に固定・誘導できるから",
+                explanation: "主流派モデルは「民間の限られた資金を政府が奪い合う（クラウディング・アウト）」と考えますが、部門別収支の恒等式が示す通り、政府の赤字は民間部門の黒字（貯蓄）を同額増やします。また、金利は市場ではなく中央銀行の政策決定でコントロールできるため、財政出動が自動的な金利高・通貨高を招くという相殺プロセスは現実的ではないとMMTは主張します。",
+                keywords: {
+                    "現代貨幣理論（MMT）": {
+                        desc: "独自の法定通貨を持つ政府は財政破綻せず、インフレ率が許す限り財政支出が可能であるとするマクロ経済理論。従来の「政府は税収や国債で集めたお金の範囲でしか支出できない」という見方を180度覆す理論です。",
+                        url: "https://ja.wikipedia.org/wiki/%E7%8F%BE%E4%BB%A3%E8%B2%A8%E5%B9%A3%E7%90%86%E8%AB%96"
+                    }
+                }
+            },
+           "第17章: 多極化決済の未来": {
+                story: "米ドル一強の時代から、BRICSの台頭やデジタル通貨、独自の決済ネットワークの拡大による「通貨の多極化」の未来を見据えます。",
+                quiz: "米国が主導する国際決済ネットワーク「SWIFT」から特定の国を排除する金融制裁の副産物として、いま世界で起きている現象は何でしょう？",
+                options: ["A) 世界中のすべての国がドル以外の使用を完全に諦めた", "B) 制裁された国や非欧米圏の国々が、ドルを使わない独自の決済ルートを発達させ、ドルの支配力が揺らぎ始めた", "C) 貿易そのものが世界から消滅した"],
+                correct: "B) 制裁された国や非欧米圏の国々が、ドルを使わない独自の決済ルートを発達させ、ドルの支配力が揺らぎ始めた",
+                explanation: "金融の武器化（制裁）が行き過ぎると、防衛策として「ドル排除経済圏」が誕生し、結果として基軸通貨ドルの地位を長期的に低下させるリスクがあります。",
+                keywords: {
+                    "SWIFT": {
+                        desc: "世界中の銀行間で安全に決済や送金の指示を通信するための、国際的なネットワーク組織。ここから排除されることは「国際金融システムからの追放」を意味します。",
+                        url: "https://ja.wikipedia.org/wiki/SWIFT"
+                    }
+                }
+            }
+        };
+
+        let currentChapter = Object.keys(chapters)[0];
+        const userAnswers = {};
+
+        // アプリ初期化
+        function initApp() {
+            const listContainer = document.getElementById("chapter-list");
+            listContainer.innerHTML = ""; // 初期化
+
+            Object.keys(chapters).forEach(ch => {
+                const btn = document.createElement("button");
+                btn.className = "chapter-btn";
+                btn.innerText = ch;
+                btn.id = "btn-" + ch;
+                btn.onclick = () => selectChapter(ch);
+                listContainer.appendChild(btn);
+            });
+
+            // エンディングボタン
+            const endBtn = document.createElement("button");
+            endBtn.className = "chapter-btn";
+            endBtn.innerText = "🏆 最終エンディング";
+            endBtn.id = "btn-ending";
+            endBtn.onclick = () => showEnding(); // 👈 正しい関数を呼び出すよう修正
+            listContainer.appendChild(endBtn);
+
+            selectChapter(currentChapter);
+        }
+
+        // 章を切り替え
+        function selectChapter(chName) {
+            currentChapter = chName;
+            
+            // 表示エリアの制御（エンディングを隠してクイズエリアを出す）
+            document.getElementById("content-area").style.display = "block";
+            document.getElementById("ending-area").style.display = "none";
+
+            // ボタンの選択状態を更新
+            document.querySelectorAll(".chapter-btn").forEach(b => b.classList.remove("active"));
+            const targetBtn = document.getElementById("btn-" + chName);
+            if (targetBtn) targetBtn.classList.add("active");
+
+            // コンテンツの書き換え
+            const data = chapters[chName];
+            document.getElementById("current-chapter-title").innerText = chName;
+            document.getElementById("story-text").innerText = data.story;
+            document.getElementById("quiz-text").innerText = data.quiz;
+            document.getElementById("quiz-box").style.display = "block";
+
+            // 選択肢の生成
+            const optContainer = document.getElementById("options-container");
+            optContainer.innerHTML = "";
+            data.options.forEach(opt => {
+                const label = document.createElement("label");
+                label.className = "option-label";
+                label.innerHTML = `<input type="radio" name="quiz-opt" value="${opt}"> ${opt}`;
+                optContainer.appendChild(label);
+            });
+
+            // 過去に回答済みかチェック
+            const resultMsg = document.getElementById("result-message");
+            const expSec = document.getElementById("explanation-section");
+            const dictSec = document.getElementById("dictionary-section");
+
+            if (userAnswers[chName]) {
+                showResult(userAnswers[chName]);
+            } else {
+                resultMsg.style.display = "none";
+                expSec.style.display = "none";
+                dictSec.style.display = "none";
+            }
+        }
+
+        // 解答チェック
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="quiz-opt"]:checked');
+            if (!selected) {
+                alert("選択肢をどれか1つ選んでください！");
+                return;
+            }
+            userAnswers[currentChapter] = selected.value;
+            showResult(selected.value);
+        }
+
+        // 結果と解説を表示
+        function showResult(userChoice) {
+            const data = chapters[currentChapter];
+            const resultMsg = document.getElementById("result-message");
+            const expSec = document.getElementById("explanation-section");
+            const dictSec = document.getElementById("dictionary-section");
+
+            resultMsg.style.display = "block";
+            if (userChoice === data.correct) {
+                resultMsg.className = "result-box result-success";
+                resultMsg.innerText = "🎉 正解です！見事な洞察力です！";
+            } else {
+                resultMsg.className = "result-box result-error";
+                resultMsg.innerText = `❌ 残念！正解は「${data.correct}」です。`;
+            }
+
+            document.getElementById("explanation-text").innerText = data.explanation;
+            expSec.style.display = "block";
+
+            // 用語辞典の生成
+            const dictContainer = document.getElementById("dictionary-container");
+            dictContainer.innerHTML = "";
+            Object.keys(data.keywords).forEach(kw => {
+                const info = data.keywords[kw];
+                const div = document.createElement("div");
+                div.className = "dict-item";
+                div.innerHTML = `
+                    <div class="dict-title">🔍 ${kw} について詳しく（ミニ解説）</div>
+                    <div class="dict-desc">
+                        ${info.desc}<br>
+                        <a href="${info.url}" target="_blank" class="dict-link">🔗 さらにWikipediaで深掘りする（外部サイト）</a>
+                    </div>
+                `;
+                dictContainer.appendChild(div);
+            });
+            dictSec.style.display = "block";
+        }
+
+        // 🏆 最終エンディング画面を表示する関数（完全に動作するように内部構造を修正）
+        function showEnding() {
+            // サイドバーのボタンのアクティブ状態をエンディングに切り替え
+            document.querySelectorAll(".chapter-btn").forEach(b => b.classList.remove("active"));
+            document.getElementById("btn-ending").classList.add("active");
+
+            // 通常のクイズ表示エリアを隠し、エンディングエリアを表示する
+            document.getElementById("content-area").style.display = "none";
+            const endingArea = document.getElementById("ending-area");
+            endingArea.style.display = "block";
+            
+            // エンディングコンテンツと、目次に戻るボタンを安全に代入
+            endingArea.innerHTML = `
+                <div class="ending-box">
+                    <h2>🎉 全章クリア！おめでとうございます！</h2>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #1e293b;">
+                        あなたは国際経済の表と裏、そして現代の貨幣の本質（MMT）にいたるまで、全ての戦略的知識をマスターしました！<br>
+                        これで「国内総生産（GDP）」の本当の意味も、「プラザ合意」の裏の歴史も、「SWIFT」の地政学的リスクも完璧に説明できますね。
+                    </p>
+                    
+                    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #bbf7d0;">
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center;">
+                        <button onclick="goToMainMenu()" style="padding: 12px 24px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; font-weight: bold;">
+                            📂 章選択（目次）に戻って復習する
+                        </button>
+                        <button onclick="restartGame()" style="padding: 12px 24px; font-size: 16px; cursor: pointer; background-color: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold;">
+                            🔄 最初からやり直す
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 目次画面（最初の章）に戻る処理
+        function goToMainMenu() {
+            // 最初の章（第0章①）を再選択して、クイズ画面を復活させる
+            const firstChapter = Object.keys(chapters)[0];
+            selectChapter(firstChapter);
+        }
+
+        // アプリを完全にリセットしてリロードする処理
+        function restartGame() {
+            location.reload();
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
